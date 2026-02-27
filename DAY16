@@ -1,0 +1,17 @@
+/*Problem: Given an array of integers, count the frequency of each distinct element and print the result.*/
+n = int(input("Enter number of elements: "))
+arr = []
+
+for i in range(n):
+    arr.append(int(input()))
+
+freq = {}
+
+for num in arr:
+    if num in freq:
+        freq[num] += 1
+    else:
+        freq[num] = 1
+
+for key in freq:
+    print(key, "occurs", freq[key], "times")
