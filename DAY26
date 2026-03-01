@@ -1,0 +1,85 @@
+/*Problem: Doubly Linked List Insertion and Traversal - Implement using linked list with dynamic memory allocation.*/
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node
+{
+    int data;
+    struct Node *prev;
+    struct Node *next;
+};
+
+struct Node* createNode(int data)
+{
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->prev = NULL;
+    newNode->next = NULL;
+    return newNode;
+}
+
+struct Node* insertEnd(struct Node* head, int data)
+{
+    struct Node* newNode = createNode(data);
+
+    if (head == NULL)
+        return newNode;
+
+    struct Node* temp = head;
+
+    while (temp->next != NULL)
+        temp = temp->next;
+
+    temp->next = newNode;
+    newNode->prev = temp;
+
+    return head;
+}
+
+void forwardTraversal(struct Node* head)
+{
+    struct Node* temp = head;
+
+    while (temp != NULL)
+    {
+        printf("%d <-> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+void backwardTraversal(struct Node* head)
+{
+    struct Node* temp = head;
+
+    if (temp == NULL)
+        return;
+
+    while (temp->next != NULL)
+        temp = temp->next;
+
+    while (temp != NULL)
+    {
+        printf("%d <-> ", temp->data);
+        temp = temp->prev;
+    }
+    printf("NULL\n");
+}
+
+int main()
+{
+    struct Node* head = NULL;
+
+    head = insertEnd(head, 10);
+    head = insertEnd(head, 20);
+    head = insertEnd(head, 30);
+    head = insertEnd(head, 40);
+
+    printf("Forward Traversal:\n");
+    forwardTraversal(head);
+
+    printf("Backward Traversal:\n");
+    backwardTraversal(head);
+
+    return 0;
+}
