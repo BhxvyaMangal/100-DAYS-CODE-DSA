@@ -1,0 +1,87 @@
+/*Problem: Rotate Linked List Right by k Places - Implement using linked list with dynamic memory allocation.*/
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int data;
+    struct node *next;
+};
+
+struct node *head = NULL;
+
+void create(int value) {
+    struct node *newnode, *temp;
+    newnode = (struct node*)malloc(sizeof(struct node));
+    newnode->data = value;
+    newnode->next = NULL;
+
+    if (head == NULL) {
+        head = newnode;
+    } else {
+        temp = head;
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = newnode;
+    }
+}
+
+void display() {
+    struct node *temp = head;
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+}
+
+void rotate(int k) {
+    if (head == NULL || head->next == NULL || k == 0)
+        return;
+
+    struct node *temp = head, *last;
+    int length = 1;
+
+    while (temp->next != NULL) {
+        temp = temp->next;
+        length++;
+    }
+
+    last = temp;
+
+    k = k % length;
+    if (k == 0)
+        return;
+
+    temp = head;
+    for (int i = 1; i < length - k; i++) {
+        temp = temp->next;
+    }
+
+    struct node *newhead = temp->next;
+    temp->next = NULL;
+    last->next = head;
+    head = newhead;
+}
+
+int main() {
+    int n, value, k;
+
+    printf("Enter number of nodes: ");
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++) {
+        printf("Enter value: ");
+        scanf("%d", &value);
+        create(value);
+    }
+
+    printf("Enter value of k: ");
+    scanf("%d", &k);
+
+    rotate(k);
+
+    printf("Rotated List: ");
+    display();
+
+    return 0;
+}
