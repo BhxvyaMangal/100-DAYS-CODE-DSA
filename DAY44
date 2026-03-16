@@ -1,0 +1,70 @@
+/*Perform inorder, preorder, and postorder traversals of a given binary tree.*/
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node
+{
+    char data;
+    struct node *left;
+    struct node *right;
+};
+
+struct node* newNode(char data)
+{
+    struct node* n = (struct node*)malloc(sizeof(struct node));
+    n->data = data;
+    n->left = NULL;
+    n->right = NULL;
+    return n;
+}
+
+void inorder(struct node* root)
+{
+    if(root != NULL)
+    {
+        inorder(root->left);
+        printf("%c ", root->data);
+        inorder(root->right);
+    }
+}
+
+void preorder(struct node* root)
+{
+    if(root != NULL)
+    {
+        printf("%c ", root->data);
+        preorder(root->left);
+        preorder(root->right);
+    }
+}
+
+void postorder(struct node* root)
+{
+    if(root != NULL)
+    {
+        postorder(root->left);
+        postorder(root->right);
+        printf("%c ", root->data);
+    }
+}
+
+int main()
+{
+    struct node* root = newNode('A');
+    root->left = newNode('B');
+    root->right = newNode('C');
+    root->left->left = newNode('D');
+    root->left->right = newNode('E');
+    root->right->right = newNode('F');
+
+    printf("Inorder: ");
+    inorder(root);
+
+    printf("\nPreorder: ");
+    preorder(root);
+
+    printf("\nPostorder: ");
+    postorder(root);
+
+    return 0;
+}
