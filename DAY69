@@ -1,0 +1,109 @@
+/*Problem: Given weighted graph with non-negative edges, compute shortest path from source using priority queue.*/
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
+
+#define MAX 100
+
+typedef struct {
+    int node;
+    int weight;
+} Edge;
+
+typedef struct {
+    int dist;
+    int node;
+} Pair;
+
+Pair heap[MAX];
+int size = 0;
+
+void swap(Pair *a, Pair *b) {
+    Pair temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void push(Pair val) {
+    heap[size] = val;
+    int i = size;
+    size++;
+
+    while (i > 0 && heap[i].dist < heap[(i - 1) / 2].dist) {
+        swap(&heap[i], &heap[(i - 1) / 2]);
+        i = (i - 1) / 2;
+    }
+}
+
+Pair pop() {
+    Pair root = heap[0];
+    heap[0] = heap[size - 1];
+    size--;
+
+    int i = 0;
+    while (2 * i + 1 < size) {
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+        int smallest = left;
+
+        if (right < size && heap[right].dist < heap[left].dist)
+            smallest = right;
+
+        if (heap[i].dist <= heap[smallest].dist)
+            break;
+
+        swap(&heap[i], &heap[smallest]);
+        i = smallest;
+    }
+
+    return root;
+}
+
+int dist[MAX];
+Edge adj[MAX][MAX];
+int adjSize[MAX];
+
+void dijkstra(int V, int src) {
+    for (int i = 0; i < V; i++)
+        dist[i] = INT_MAX;
+
+    dist[src] = 0;
+    push((Pair){0, src});
+
+    while (size > 0) {
+        Pair top = pop();
+        int u = top.node;
+
+        for (int i = 0; i < adjSize[u]; i++) {
+            int v = adj[u][i].node;
+            int w = adj[u][i].weight;
+
+            if (dist[u] + w < dist[v]) {
+                dist[v] = dist[u] + w;
+                push((Pair){dist[v], v});
+            }
+        }
+    }
+}
+
+int main() {
+    int V = 5;
+
+    for (int i = 0; i < V; i++)
+        adjSize[i] = 0;
+
+    adj[0][adjSize[0]++] = (Edge){1, 2};
+    adj[0][adjSize[0]++] = (Edge){2, 4};
+    adj[1][adjSize[1]++] = (Edge){2, 1};
+    adj[1][adjSize[1]++] = (Edge){3, 7};
+    adj[2][adjSize[2]++] = (Edge){4, 3};
+    adj[3][adjSize[3]++] = (Edge){4, 1};
+
+    dijkstra(V, 0);
+
+    printf("Shortest distances from source:\n");
+    for (int i = 0; i < V; i++)
+        printf("Node %d : %d\n", i, dist[i]);
+
+    return 0;
+}
