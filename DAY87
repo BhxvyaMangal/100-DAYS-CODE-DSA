@@ -1,0 +1,24 @@
+/*Implement Binary Search Iterative - Implement the algorithm.*/
+n = int(input())
+arr = list(map(int, input().split()))
+
+arr.sort()
+print(*arr)
+
+target = int(input())
+
+low = 0
+high = n - 1
+found = -1
+
+while low <= high:
+    mid = (low + high) // 2
+    if arr[mid] == target:
+        found = mid
+        break
+    elif arr[mid] < target:
+        low = mid + 1
+    else:
+        high = mid - 1
+
+print(found)
